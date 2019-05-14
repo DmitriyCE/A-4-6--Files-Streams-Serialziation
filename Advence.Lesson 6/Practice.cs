@@ -104,6 +104,22 @@ namespace Advence.Lesson_6
                 Duration = 247,
                 Lyrics = "Lyrics 1"
             };
+            string srlzn;
+            XmlSerializer formatter = new XmlSerializer(typeof(Song));
+
+            using (StringWriter sw = new StringWriter())
+            {
+                formatter.Serialize(sw, song);
+                Console.WriteLine(sw);
+                srlzn = sw.ToString();
+            }
+            //десериализация
+            using (StringReader sr = new StringReader(srlzn))
+            {
+                Song newsong = (Song)formatter.Deserialize(sr);
+                Console.WriteLine("song deserialize");
+                Console.WriteLine($"Title - {newsong.Title}, Duration - {newsong.Duration} ");
+            }
         }
 
         /// <summary>
@@ -112,7 +128,26 @@ namespace Advence.Lesson_6
         /// </summary>
         public static void AL6_P7_7_FileSrlz()
         {
+            Song song = new Song()
+            {
+                Title = "Title 1",
+                Duration = 247,
+                Lyrics = "Lyrics 1"
+            };
 
+            XmlSerializer formatter = new XmlSerializer(typeof(Song));
+            using (FileStream fs = new FileStream("song.xml", FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(fs, song);
+                Console.WriteLine("song сериализован");
+                //десериализация
+                Song newsong = (Song)formatter.Deserialize(fs);
+                Console.WriteLine("song deserialize");
+                Console.WriteLine($"Title - {newsong.Title}, Duration - {newsong.Duration} ");
+            }
+
+            
+               
         }
 
     }
